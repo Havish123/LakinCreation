@@ -1,0 +1,10 @@
+﻿@page
+@model AashaGifts.Web.Pages.Account.LogoutModel
+@{
+    ViewData["Title"] = "Logout";
+}
+<form method="post" class="text-center mt-5">
+    <h2>Are you sure you want to logout?</h2>
+    <button type="submit" class="btn btn-danger mt-3">Logout</button>
+    <a asp-page="/Index" class="btn btn-secondary mt-3 ms-2">Cancel</a>
+</form>

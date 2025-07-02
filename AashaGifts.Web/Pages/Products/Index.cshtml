@@ -1,0 +1,43 @@
+﻿@page
+@model AashaGifts.Web.Pages.Products.IndexModel
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "Admin")]
+@{
+    ViewData["Title"] = "Manage Products";
+}
+
+<h2>Product Management</h2>
+<a asp-page="Create" class="btn btn-success mb-3">Add New Product</a>
+<table class="table table-bordered table-hover table-responsive">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Images</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var p in Model.Products)
+        {
+            <tr>
+                <td>@p.Name</td>
+                <td>@p.Category</td>
+                <td>@p.Description</td>
+                <td>₹@p.Price</td>
+                <td>
+                    @if (p.Images.Any())
+                    {
+                        <img src="@p.Images.First().ImageUrl" style="height:40px;" class="img-thumbnail" />
+                    }
+                </td>
+                <td>
+                    <a asp-page="Edit" asp-route-id="@p.Id" class="btn btn-warning btn-sm">Edit</a>
+                    <a asp-page="Delete" asp-route-id="@p.Id" class="btn btn-danger btn-sm">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

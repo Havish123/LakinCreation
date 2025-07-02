@@ -1,0 +1,63 @@
+﻿@page
+@model AashaGifts.Web.Pages.Admin.OrderModel
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "Admin")]
+@{
+    ViewData["Title"] = "Admin - Order";
+}
+
+<h2>Admin: Orders</h2>
+@if (Model.Orders.Count == 0)
+{
+    <div class="alert alert-info">No orders yet.</div>
+}
+else
+{
+    <table class="table table-bordered table-hover align-middle table-responsive">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Order Date</th>
+                <th>Product</th>
+                <th>Customer</th>
+                <th>Email</th>
+                <th>Photo</th>
+                <th>Status</th>
+                <th>Mark Complete</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in Model.Orders)
+            {
+                <tr>
+                    <td>@order.Id</td>
+                    <td>@order.OrderDate.ToString("yyyy-MM-dd HH:mm")</td>
+                    <td>@order.ProductName</td>
+                    <td>@order.CustomerName</td>
+                    <td>@order.Email</td>
+                    <td>
+                        <a href="@order.UploadedPhotoPath" class="btn btn-sm btn-outline-primary" download>Download</a>
+                    </td>
+                    <td>
+                        @if (order.Status == "Completed")
+                        {
+                            <span class="badge bg-success">Completed</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-warning text-dark">Pending</span>
+                        }
+                    </td>
+                    <td>
+                        @if (order.Status != "Completed")
+                        {
+                            <form method="post" asp-page-handler="MarkCompleted" asp-route-id="@order.Id">
+                                <button type="submit" class="btn btn-success btn-sm">Mark as Completed</button>
+                            </form>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
