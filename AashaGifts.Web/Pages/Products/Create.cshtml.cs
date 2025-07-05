@@ -3,6 +3,7 @@ using AashaGifts.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace AashaGifts.Web.Pages.Products
 {
@@ -11,7 +12,7 @@ namespace AashaGifts.Web.Pages.Products
     {
         private readonly AppDbContext _db;
         private readonly IWebHostEnvironment _env;
-
+        public SelectList CategoryList { get; set; }
         public CreateModel(AppDbContext db, IWebHostEnvironment env)
         {
             _db = db;
@@ -24,7 +25,10 @@ namespace AashaGifts.Web.Pages.Products
         [BindProperty]
         public List<IFormFile> Images { get; set; } = new();
 
-        public void OnGet() { }
+        public void OnGet()
+        {
+            CategoryList = new SelectList(_db.Categories, "Id", "Name");
+        }
 
         public async Task<IActionResult> OnPostAsync()
         {

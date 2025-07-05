@@ -1,10 +1,14 @@
 ﻿@page "{id:int}"
 @model AashaGifts.Web.Pages.OrderModel
+@using System.Security.Claims
 @{
     ViewData["Title"] = "Order";
-}
 
-<h2>Order: @Model.Product?.Name</h2>
+    bool isLoggedIn = User.Identity?.IsAuthenticated == true;
+    string? userName = isLoggedIn ? User.Identity?.Name : "";
+    string? userEmail = isLoggedIn ? User.FindFirst(ClaimTypes.Email)?.Value : "";
+}
+<h2 class="text-warning mb-4">Order: @Model.Product?.Name</h2>
 
 @if (Model.Product == null)
 {
@@ -12,45 +16,63 @@
 }
 else
 {
-    @if (Model.Product.Images.Any())
-    {
-        <div id="carouselOrder@Model.Product.Id" class="carousel slide mb-3" data-bs-ride="carousel">
-            <div class="carousel-inner">
-                @for (int i = 0; i < Model.Product.Images.Count; i++)
-                {
-                    var img = Model.Product.Images.ElementAt(i);
-                    <div class="carousel-item @(i == 0 ? "active" : "")">
-                        <img src="@img.ImageUrl" class="d-block w-100 img-fluid" alt="Product image" />
+    <div class="row g-4">
+        <div class="col-12 col-md-6">
+            @if (Model.Product.Images.Any())
+            {
+                <div id="carouselOrder@Model.Product.Id" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner rounded shadow-sm">
+                        @for (int i = 0; i < Model.Product.Images.Count; i++)
+                        {
+                            var img = Model.Product.Images.ElementAt(i);
+                            <div class="carousel-item @(i == 0 ? "active" : "")">
+                                <img src="@img.ImageUrl" class="d-block w-100 img-fluid rounded" alt="Product image" />
+                            </div>
+                        }
                     </div>
-                }
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselOrder@Model.Product.Id" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon"></span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselOrder@Model.Product.Id" data-bs-slide="next">
+                        <span class="carousel-control-next-icon"></span>
+                    </button>
+                </div>
+            }
+        </div>
+
+        <div class="col-12 col-md-6">
+            <form method="post" enctype="multipart/form-data" class="p-3 border rounded bg-dark text-light shadow-sm">
+                <div class="mb-3">
+                    <label asp-for="OrderInput.CustomerName" class="form-label">Name</label>
+                    <input class="form-control"
+                           name="OrderInput.CustomerName"
+                           type="text"
+                           value="@userName"
+                           readonly="@(isLoggedIn ? "readonly" : null)"
+                           disabled="@(isLoggedIn ? "disabled" : null)" />
+                    <span asp-validation-for="OrderInput.CustomerName" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="OrderInput.Email" class="form-label">Email</label>
+                    <input class="form-control"
+                           name="OrderInput.Email"
+                           type="email"
+                           value="@userEmail"
+                           readonly="@(isLoggedIn ? "readonly" : null)"
+                           disabled="@(isLoggedIn ? "disabled" : null)" />
+                    <span asp-validation-for="OrderInput.Email" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Photo" class="form-label">Upload Photo to Print</label>
+                    <input asp-for="Photo" class="form-control" type="file" accept="image/*" required />
+                    <span asp-validation-for="Photo" class="text-danger"></span>
+                </div>
+                <button type="submit" class="btn btn-warning w-100">Place Order</button>
+            </form>
+
+            <div class="alert alert-info mt-3">
+                <strong>Payment:</strong> Razorpay integration coming soon.
             </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselOrder@Model.Product.Id" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon"></span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselOrder@Model.Product.Id" data-bs-slide="next">
-                <span class="carousel-control-next-icon"></span>
-            </button>
         </div>
-    }
-    <form method="post" enctype="multipart/form-data" class="mb-3">
-        <div class="mb-3">
-            <label asp-for="OrderInput.CustomerName" class="form-label"></label>
-            <input asp-for="OrderInput.CustomerName" class="form-control" required />
-            <span asp-validation-for="OrderInput.CustomerName" class="text-danger"></span>
-        </div>
-        <div class="mb-3">
-            <label asp-for="OrderInput.Email" class="form-label"></label>
-            <input asp-for="OrderInput.Email" class="form-control" type="email" required />
-            <span asp-validation-for="OrderInput.Email" class="text-danger"></span>
-        </div>
-        <div class="mb-3">
-            <label asp-for="Photo" class="form-label">Photo to Print</label>
-            <input asp-for="Photo" class="form-control" type="file" accept="image/*" required />
-            <span asp-validation-for="Photo" class="text-danger"></span>
-        </div>
-        <button type="submit" class="btn btn-success">Place Order</button>
-    </form>
-    <div class="alert alert-info">
-        <b>Payment:</b> Razorpay integration coming soon.
     </div>
 }

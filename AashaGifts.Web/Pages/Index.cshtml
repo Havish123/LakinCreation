@@ -4,15 +4,15 @@
     ViewData["Title"] = "Products";
 }
 
-<h2 class="mb-4">Products</h2>
+<h2 class="mb-4 text-light">Products</h2>
 @foreach (var group in Model.Products.GroupBy(p => p.Category))
 {
-    <h4>@group.Key</h4>
-    <div class="row row-cols-1 row-cols-md-3 g-3 mb-3">
+    <h4 class="text-warning mt-4">@group.Key</h4>
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
         @foreach (var product in group)
         {
             <div class="col">
-                <div class="card h-100">
+                <div class="card product-card h-100 shadow-sm border-0">
                     @if (product.Images.Any())
                     {
                         <div id="carousel@product.Id" class="carousel slide" data-bs-ride="carousel">
@@ -21,7 +21,7 @@
                                 {
                                     var img = product.Images.ElementAt(i);
                                     <div class="carousel-item @(i == 0 ? "active" : "")">
-                                        <img src="@img.ImageUrl" class="d-block w-100" alt="Product image" />
+                                        <img src="@img.ImageUrl" class="d-block w-100 product-image" alt="Product image" />
                                     </div>
                                 }
                             </div>
@@ -33,11 +33,16 @@
                             </button>
                         </div>
                     }
+                    else
+                    {
+                        <img src="/images/placeholder.png" class="card-img-top product-image" alt="Product image" />
+                    }
+
                     <div class="card-body">
-                        <h5 class="card-title">@product.Name</h5>
-                        <p class="card-text">@product.Description</p>
-                        <p><strong>₹@product.Price</strong></p>
-                        <a asp-page="/Order" asp-route-id="@product.Id" class="btn btn-primary">Order Now</a>
+                        <h5 class="card-title text-warning">@product.Name</h5>
+                        <p class="card-text text-light small">@product.Description</p>
+                        <p class="fw-bold text-white">₹@product.Price</p>
+                        <a asp-page="/Order" asp-route-id="@product.Id" class="btn btn-warning w-100">Order Now</a>
                     </div>
                 </div>
             </div>

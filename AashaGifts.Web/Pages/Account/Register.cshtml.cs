@@ -1,3 +1,4 @@
+using AashaGifts.Web.Enums;
 using AashaGifts.Web.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -25,6 +26,8 @@ namespace AashaGifts.Web.Pages.Account
         public class RegisterInput
         {
             [Required]
+            public string Username { get; set; } = "";
+            [Required]
             [EmailAddress]
             public string Email { get; set; } = "";
             [Required]
@@ -40,15 +43,32 @@ namespace AashaGifts.Web.Pages.Account
 
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!ModelState.IsValid) return Page();
+            if (!ModelState.IsValid)
+                return Page();
 
-            var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email, EmailConfirmed = true };
+            var user = new ApplicationUser
+            {
+                UserName = Input.Username,
+                Email = Input.Email,
+                EmailConfirmed = true
+            };
+
             var result = await _userManager.CreateAsync(user, Input.Password);
+
             if (result.Succeeded)
             {
+                // Add role *after* user is created
+                var roleResult = await _userManager.AddToRoleAsync(user, UserRoles.Customer.GetEnumDescription());
+                if (!roleResult.Succeeded)
+                {
+                    ErrorMessage = string.Join(" ", roleResult.Errors.Select(e => e.Description));
+                    return Page();
+                }
+
                 await _signInManager.SignInAsync(user, false);
                 return RedirectToPage("/Index");
             }
+
             ErrorMessage = string.Join(" ", result.Errors.Select(e => e.Description));
             return Page();
         }

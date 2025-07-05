@@ -3,33 +3,66 @@
 @{
     ViewData["Title"] = "Sign Up";
 }
-<div class="row justify-content-center">
-    <div class="col-12 col-sm-8 col-md-6 col-lg-4">
-        <h2 class="mb-4">Sign Up</h2>
-        <form method="post">
-            <div class="mb-3">
-                <label asp-for="Input.Email" class="form-label"></label>
-                <input asp-for="Input.Email" class="form-control" />
-                <span asp-validation-for="Input.Email" class="text-danger"></span>
+
+<style>
+    
+
+    .register-background {
+        position: center;
+        background: url('/images/lakincreation.png') no-repeat center center;
+        background-size: cover;
+        opacity: 0.07;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 0;
+    }
+    .register-container {
+        position: relative;
+        z-index: 1;
+    }
+</style>
+
+<div class="position-relative min-vh-100 d-flex align-items-center justify-content-center bg-dark text-light">
+    <div class="register-background"></div>
+
+    <div class="register-container container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-sm-8 col-md-6 col-lg-4 bg-secondary bg-opacity-10 p-4 rounded shadow">
+                <h2 class="mb-4 text-warning">Sign Up</h2>
+                <form method="post">
+                    <div class="mb-3">
+                        <label asp-for="Input.Username" class="form-label">Username</label>
+                        <input asp-for="Input.Username" class="form-control" />
+                        <span asp-validation-for="Input.Username" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Input.Email" class="form-label">Email</label>
+                        <input asp-for="Input.Email" class="form-control" />
+                        <span asp-validation-for="Input.Email" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Input.Password" class="form-label">Password</label>
+                        <input asp-for="Input.Password" class="form-control" type="password" />
+                        <span asp-validation-for="Input.Password" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Input.ConfirmPassword" class="form-label">Confirm Password</label>
+                        <input asp-for="Input.ConfirmPassword" class="form-control" type="password" />
+                        <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                    </div>
+                    <button type="submit" class="btn btn-success w-100">Sign Up</button>
+                    <div class="mt-2">
+                        <a asp-page="/Account/Login" class="text-light">Already have an account? Login</a>
+                    </div>
+                </form>
+                @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+                {
+                    <div class="alert alert-danger mt-3">@Model.ErrorMessage</div>
+                }
             </div>
-            <div class="mb-3">
-                <label asp-for="Input.Password" class="form-label"></label>
-                <input asp-for="Input.Password" class="form-control" type="password" />
-                <span asp-validation-for="Input.Password" class="text-danger"></span>
-            </div>
-            <div class="mb-3">
-                <label asp-for="Input.ConfirmPassword" class="form-label"></label>
-                <input asp-for="Input.ConfirmPassword" class="form-control" type="password" />
-                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
-            </div>
-            <button type="submit" class="btn btn-success w-100">Sign Up</button>
-            <div class="mt-2">
-                <a asp-page="/Account/Login">Already have an account? Login</a>
-            </div>
-        </form>
-        @if (!string.IsNullOrEmpty(Model.ErrorMessage))
-        {
-            <div class="alert alert-danger mt-3">@Model.ErrorMessage</div>
-        }
+        </div>
     </div>
 </div>

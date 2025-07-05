@@ -20,3 +20,57 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+body {
+    background-color: #121212; /* deep dark background */
+    color: #f1f1f1; /* light text for contrast */
+    font-family: 'Segoe UI', sans-serif;
+    background-image: linear-gradient(145deg, #1a1a1a, #111111);
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-size: cover;
+    min-height: 100vh;
+}
+
+/* Optional glowing text or header styles */
+h1, h2, h3 {
+    color: #ff6a00;
+    text-shadow: 0 0 5px #ff6a00aa, 0 0 10px #ff6a00aa;
+}
+
+/* Buttons matching logo theme */
+.btn-primary {
+    background-color: #ff6a00;
+    border-color: #ff6a00;
+}
+
+    .btn-primary:hover {
+        background-color: #e65c00;
+        border-color: #e65c00;
+    }
+
+/* Cards or content containers */
+.card {
+    background-color: #1e1e1e;
+    border: 1px solid #333;
+    box-shadow: 0 4px 12px rgba(255, 106, 0, 0.1);
+}
+
+
+.product-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    background-color: #1e1e1e;
+    border-radius: 12px;
+}
+
+    .product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 20px rgba(255, 106, 0, 0.3);
+    }
+
+.product-image {
+    height: 220px;
+    object-fit: cover;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+}

@@ -37,6 +37,10 @@ namespace AashaGifts.Web.Pages.Account
             var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, false, false);
             if (result.Succeeded)
             {
+                foreach (var cookie in Request.Cookies.Keys)
+                {
+                    Response.Cookies.Delete(cookie);
+                }
                 if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
                     return Redirect(returnUrl);
 

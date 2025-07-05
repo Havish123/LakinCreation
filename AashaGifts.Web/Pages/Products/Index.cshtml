@@ -8,7 +8,7 @@
 
 <h2>Product Management</h2>
 <a asp-page="Create" class="btn btn-success mb-3">Add New Product</a>
-<table class="table table-bordered table-hover table-responsive">
+<table class="table table-bordered table-hover align-middle table-responsive table-dark text-light">
     <thead>
         <tr>
             <th>Name</th>
@@ -24,7 +24,7 @@
         {
             <tr>
                 <td>@p.Name</td>
-                <td>@p.Category</td>
+                <td>@p.Category.Name</td>
                 <td>@p.Description</td>
                 <td>₹@p.Price</td>
                 <td>

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
+using System.Security.Claims;
 
 namespace AashaGifts.Web.Pages
 {
@@ -74,7 +75,9 @@ namespace AashaGifts.Web.Pages
             {
                 await Photo.CopyToAsync(stream);
             }
-
+            var userId = User.Identity?.IsAuthenticated == true
+                ? User.FindFirst(ClaimTypes.NameIdentifier)?.Value
+                : null;
             // Save order
             var order = new Order
             {
@@ -84,7 +87,7 @@ namespace AashaGifts.Web.Pages
                 ProductName = Product.Name,
                 UploadedPhotoPath = $"/uploads/{fileName}",
                 Status = "Pending",
-                UserId = User.Identity?.IsAuthenticated == true ? User.FindFirst("sub")?.Value : null
+                UserId = userId
             };
 
             _db.Orders.Add(order);

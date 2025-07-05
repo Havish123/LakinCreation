@@ -3,6 +3,7 @@ using AashaGifts.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace AashaGifts.Web.Pages.Products
@@ -13,6 +14,7 @@ namespace AashaGifts.Web.Pages.Products
         private readonly AppDbContext _db;
         private readonly IWebHostEnvironment _env;
 
+        public SelectList CategoryList { get; set; }
         public EditModel(AppDbContext db, IWebHostEnvironment env)
         {
             _db = db;
@@ -28,9 +30,11 @@ namespace AashaGifts.Web.Pages.Products
         public async Task<IActionResult> OnGetAsync(int id)
         {
             Product = await _db.Products.Include(p => p.Images).FirstOrDefaultAsync(p => p.Id == id) ?? new();
+            CategoryList = new SelectList(_db.Categories, "Id", "Name");
             if (Product == null) return NotFound();
             return Page();
         }
+
 
         public async Task<IActionResult> OnPostAsync()
         {
@@ -40,7 +44,7 @@ namespace AashaGifts.Web.Pages.Products
             if (dbProduct == null) return NotFound();
 
             dbProduct.Name = Product.Name;
-            dbProduct.Category = Product.Category;
+            dbProduct.CategoryId = Product.CategoryId;
             dbProduct.Description = Product.Description;
             dbProduct.Price = Product.Price;
 

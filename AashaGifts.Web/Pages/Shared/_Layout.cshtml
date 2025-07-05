@@ -4,6 +4,7 @@
 @{
     Layout = null;
     var isAdmin = User.IsInRole("Admin");
+    var isCustomer = User.IsInRole("Customer");
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -13,7 +14,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet"
+          href="~/css/site.css" /> 
     <style>
+        .navbar-brand img {
+            height: 50px;
+        }
+
+        .navbar {
+            background-color: #1e1e1e !important;
+        }
+
+        .nav-link,
+        .navbar-brand {
+            color: #f8f9fa !important;
+        }
+
+            .nav-link:hover {
+                color: #ffc107 !important;
+            }
+
         .carousel-item img {
             max-height: 300px;
             object-fit: cover;
@@ -21,9 +41,11 @@
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
+    <nav class="navbar navbar-expand-lg navbar-dark mb-4">
         <div class="container-fluid">
-            <a class="navbar-brand" asp-page="/Index">Aasha Gifts</a>
+            <a class="navbar-brand" asp-page="/Index">
+                <img src="~/images/lakincreation.png" alt="Lakin Creation Logo" />
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -39,6 +61,14 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" asp-page="/Products/Index">Manage Products</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-page="/Categories/Index">Manage Categories</a>
+                        </li>
+                    }
+                    @if(isCustomer){
+                        <li class="nav-item">
+                            <a class="nav-link" asp-page="/Customer/Index">Orders</a>
                         </li>
                     }
                 </ul>
@@ -63,9 +93,11 @@
             </div>
         </div>
     </nav>
+
     <div class="container-fluid px-2 px-md-5">
         @RenderBody()
     </div>
+    @RenderSection("Scripts", required: false)
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

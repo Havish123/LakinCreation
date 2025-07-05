@@ -81,6 +81,38 @@ namespace AashaGifts.Web.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("AashaGifts.Web.Models.Category", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Categories");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Albums"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Banners"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Photo Gifts"
+                        });
+                });
+
             modelBuilder.Entity("AashaGifts.Web.Models.Order", b =>
                 {
                     b.Property<int>("Id")
@@ -127,9 +159,8 @@ namespace AashaGifts.Web.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Category")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -143,6 +174,8 @@ namespace AashaGifts.Web.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
 
                     b.ToTable("Products");
                 });
@@ -299,6 +332,17 @@ namespace AashaGifts.Web.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("AashaGifts.Web.Models.Product", b =>
+                {
+                    b.HasOne("AashaGifts.Web.Models.Category", "Category")
+                        .WithMany("Products")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+                });
+
             modelBuilder.Entity("AashaGifts.Web.Models.ProductImage", b =>
                 {
                     b.HasOne("AashaGifts.Web.Models.Product", "Product")
@@ -359,6 +403,11 @@ namespace AashaGifts.Web.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("AashaGifts.Web.Models.Category", b =>
+                {
+                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("AashaGifts.Web.Models.Product", b =>
